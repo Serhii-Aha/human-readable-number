@@ -45,7 +45,10 @@ module.exports = function toReadable (number) {
     if (converted_number[n] != 0) {
         if (two_digit_number > 19) {
             second_digit = converted_number[n] + '0';
-            second_str = (n == 1) ? ' ' + collation_list[second_digit] : '' + collation_list[second_digit];
+            if (n == 1) {
+                second_str = ' ';
+            }
+        second_str += collation_list[second_digit];
         } else {
             second_str = ' ' + collation_list[two_digit_number];
         }
