@@ -29,11 +29,11 @@ module.exports = function toReadable (number) {
         80: 'eighty',
         90: 'ninety',
     }
-    let result, first_digit, second_digit, last_digit;
-    let n = 0, first_str = '', second_str = '', last_str = ''; 
+    let two_digit_number, first_digit, second_digit, last_digit;
+    let n = 0, // - two_digit_number if n = 1 three_digit_number
+    first_str = '', second_str = '', last_str = '';
     let converted_number = number.toString();
     if (Object.keys(collation_list).includes(converted_number)) {
-        // return result = collation_list[converted_number];
         return collation_list[converted_number];
     }
     if (converted_number.length == 3) {
@@ -41,14 +41,18 @@ module.exports = function toReadable (number) {
         first_str = collation_list[first_digit] + ' hundred';
         n = 1;
     }
+    two_digit_number = (n == 1) ? number % 100 : number;
     if (converted_number[n] != 0) {
-        second_digit = converted_number[n] + '0';
-        second_str = ' ' + collation_list[second_digit];
+        if (two_digit_number > 19) {
+            second_digit = converted_number[n] + '0';
+            second_str = (n == 1) ? ' ' + collation_list[second_digit] : '' + collation_list[second_digit];
+        } else {
+            second_str = ' ' + collation_list[two_digit_number];
+        }
     }
-    if (converted_number[n + 1] != 0) {
+    if (converted_number[n + 1] != 0 && !((two_digit_number >= 11) && (two_digit_number <= 19))) {
         last_digit = converted_number[n + 1];
         last_str = ' ' + collation_list[last_digit];
     }
-    
     return first_str + second_str + last_str;
 }
